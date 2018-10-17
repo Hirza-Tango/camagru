@@ -14,12 +14,7 @@ if ($file = file_get_contents(dirname(__FILE__)."/setup.sql"))
 			//	It is only used in this case to setup the database because the setup
 			//		script only has one possible permutation at a given time
 			//	Used for simplicity
-			if ($db->exec($s) === false)
-			{
-				$db->rollBack();
-				echo "Database setup failed";
-				exit(1);
-			}
+			$db->exec($s);
 		} catch (PDOException $e){
 			$db->rollBack();
 			echo "Database setup: ", $e->getMessage(), PHP_EOL;

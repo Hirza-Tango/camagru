@@ -1,22 +1,23 @@
 CREATE TABLE IF NOT EXISTS `users` (
-	`uuid` BINARY(16) PRIMARY KEY,
-	`email` VARCHAR(191) NOT NULL,
+	`uuid` CHAR(36) PRIMARY KEY,
+	`email` VARCHAR(191) UNIQUE NOT NULL,
 	`username` VARCHAR(191) UNIQUE NOT NULL,
-	`password` BINARY(64) NOT NULL,
+	`password` CHAR(128) NOT NULL,
 	`email_on_comment` BOOL NOT NULL DEFAULT 1
 );
 
 CREATE TABLE IF NOT EXISTS `uploads` (
-	`uuid` BINARY(16) PRIMARY KEY,
-	`user` BINARY(16) NOT NULL,
+	`uuid` CHAR(36) PRIMARY KEY,
+	`user` CHAR(36) NOT NULL,
 	`like_count` INT NOT NULL DEFAULT 0,
+	`comment_count` INT NOT NULL DEFAULT 0,
 	`created` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	FOREIGN KEY (`user`) REFERENCES `users`(`uuid`)
+	FOREIGN KEY (`user`) REFERENCES `users`(`uuid`) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS `comments` (
-	`upload` BINARY(16) NOT NULL,
-	`user` BINARY(16) NOT NULL,
+	`upload` CHAR(36) NOT NULL,
+	`user` CHAR(36) NOT NULL,
 	`text` TEXT NOT NULL,
 	`created` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	`updated` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -25,9 +26,30 @@ CREATE TABLE IF NOT EXISTS `comments` (
 );
 
 CREATE TABLE IF NOT EXISTS `likes` (
-	`upload` BINARY(16) NOT NULL,
-	`user` BINARY(16) NOT NULL,
+	`upload` CHAR(36) NOT NULL,
+	`user` CHAR(36) NOT NULL,
 	`created` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	UNIQUE INDEX (`upload`, `user`),
 	FOREIGN KEY (`user`) REFERENCES `users`(`uuid`) ON DELETE CASCADE,
 	FOREIGN KEY (`upload`) REFERENCES `uploads`(`uuid`) ON DELETE CASCADE
 );
+
+CREATE TRIGGER LIKE_INCREMENT AFTER INSERT ON `likes`
+FOR EACH ROW
+	UPDATE `uploads` SET `like_count` = `like_count` + 1
+	WHERE `uuid` = NEW.`upload`;
+ 
+CREATE TRIGGER COMMENT_INCREMENT AFTER INSERT ON `comments`
+FOR EACH ROW
+	UPDATE `uploads` SET `comment_count` = `comment_count` + 1
+	WHERE `uuid` = NEW.`upload`;
+
+CREATE TRIGGER LIKE_DECREMENT AFTER DELETE ON `likes`
+FOR EACH ROW
+	UPDATE `uploads` SET `like_count` = `like_count` - 1
+	WHERE `uuid` = OLD.`upload`;
+ 
+CREATE TRIGGER COMMENT_DECREMENT AFTER DELETE ON `comments`
+FOR EACH ROW
+	UPDATE `uploads` SET `comment_count` = `comment_count` - 1
+	WHERE `uuid` = OLD.`upload`;
