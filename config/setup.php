@@ -1,11 +1,10 @@
 <?php
 require_once("database.php");
-global $db;
 if ($file = file_get_contents(dirname(__FILE__)."/setup.sql"))
 {
+	$db->beginTransaction();
 	//I use a naive preg split to work around undocumented behaviour in PDO::exec()
 	//Where errors on statements after the first do not throw errors
-	$db->beginTransaction();
 	$stmts = preg_split('/;/', trim($file), -1, PREG_SPLIT_NO_EMPTY);
 	foreach ($stmts as $s)
 		try {
