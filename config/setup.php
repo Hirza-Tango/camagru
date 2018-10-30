@@ -1,3 +1,4 @@
+#!/usr/bin/env php
 <?php
 require_once("database.php");
 if ($file = file_get_contents(dirname(__FILE__)."/setup.sql"))

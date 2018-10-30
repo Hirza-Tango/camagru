@@ -31,6 +31,7 @@ $sql_get_login = $db->prepare('
 		email = :email
 		AND password = :pass
 ');
+
 $sql_post_user = $db->prepare('
 	INSERT INTO `users`
 		(`uuid`,`email`,`username`,`password`)
@@ -60,9 +61,14 @@ $sql_post_like = $db->prepare('
 $sql_update_user = $db->prepare('
 	UPDATE `users` SET
 		`username`= :username,
-		`password`= :newpass,
 		`email`= :newemail,
 		`email_on_comment`= :email_on_comment
+	WHERE
+		`uuid` = :user
+');
+$sql_update_password = $db->prepare('
+	UPDATE `users` SET
+		`password`= :newpass,
 	WHERE
 		`uuid` = :user
 ');

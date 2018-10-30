@@ -1,4 +1,19 @@
-<!doctype html>
+<?php
+require_once('Model/sql_prepare.php');
+print_r($_POST);
+if (isset($_POST['login'])) {
+	try {
+		$sql_get_login->execute(Array(":email"=>$_POST["email"], "pass"=>$_POST["password"]));
+		echo $sql_get_login->fetchAll(PDO::FETCH_ASSOC), PHP_EOL;
+	} catch (PDOException $p) {
+		echo $p->getMessage(), PHP_EOL;
+	}
+}
+else if (isset($_POST['register']))
+{
+
+}
+?><!doctype html>
 <html lang="en">
 <head>
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -27,21 +42,24 @@
 			<img src="https://vectr.com/hirza_tango/o1dtN6CW2P.svg" width="40" height="40" alt="">
 			Camagru
 		</a>
-		<form class="form-row">
-			<div class="col-auto">
-				<input type="text" class="form-control" placeholder="Email">
-			</div>
-			<div class="col-auto">
-				<input type="password" class="form-control" placeholder="Password">
-				<a href="#">Forgotten password?</a>
-			</div>
-			<div class="col-auto">
-				<button class="btn btn-primary" type="button">Login</button>
-			</div>
-			<div class="col-auto">
-				<button class="btn btn-secondary" type="button">Register</button>
-			</div>
-		</form>
+		<div class="form-row">
+			<form action="index.php" method="post">
+				<div class="col-auto">
+					<input type="text" class="form-control" placeholder="Email" name="email">
+				</div>
+				<div class="col-auto">
+					<input type="password" class="form-control" placeholder="Password" name="password">
+					<a href="#">Forgotten password?</a>
+				</div>
+				<div class="col-auto">
+					<button class="btn btn-primary" type="submit" name="login">Login</button>
+				</div>
+			
+				<div class="col-auto">
+					<button class="btn btn-secondary" type="submit" name="register">Register</button>
+				</div>
+			</form>
+		</div>
 	</nav>
 	<div class="container">
 		<div class="row justify-content-center">
@@ -52,7 +70,7 @@
 						Username
 					</div>
 					<div class="card-body">
-						<img src="https://picsum.photos/1000/3000?random">
+						<img src="https://picsum.photos/100/300?random">
 					</div>
 					<div class="card-footer">
 						<div class="row">
@@ -77,7 +95,7 @@
 						Username
 					</div>
 					<div class="card-body">
-						<img src="https://picsum.photos/3000/1000?random">
+						<img src="https://picsum.photos/300/100?random">
 					</div>
 					<div class="card-footer">
 						<div class="row">
@@ -102,7 +120,7 @@
 						Username
 					</div>
 					<div class="card-body">
-						<img src="https://picsum.photos/2000/3000?random">
+						<img src="https://picsum.photos/200/300?random">
 					</div>
 					<div class="card-footer">
 						<div class="row">
@@ -127,7 +145,7 @@
 						Username
 					</div>
 					<div class="card-body">
-						<img src="https://picsum.photos/3000/2000?random">
+						<img src="https://picsum.photos/300/200?random">
 					</div>
 					<div class="card-footer">
 						<div class="row">
@@ -152,7 +170,7 @@
 						Username
 					</div>
 					<div class="card-body">
-						<img src="https://picsum.photos/3000/3000?random">
+						<img src="https://picsum.photos/300/300?random">
 					</div>
 					<div class="card-footer">
 						<div class="row">
@@ -177,7 +195,7 @@
 						Username
 					</div>
 					<div class="card-body">
-						<img src="https://picsum.photos/1000/2000?random">
+						<img src="https://picsum.photos/100/200?random">
 					</div>
 					<div class="card-footer">
 						<div class="row">
@@ -202,7 +220,7 @@
 						Username
 					</div>
 					<div class="card-body">
-						<img src="https://picsum.photos/2000/2000?random">
+						<img src="https://picsum.photos/200/200?random">
 					</div>
 					<div class="card-footer">
 						<div class="row">
@@ -227,7 +245,7 @@
 						Username
 					</div>
 					<div class="card-body">
-						<img src="https://picsum.photos/1000/1000?random">
+						<img src="https://picsum.photos/100/100?random">
 					</div>
 					<div class="card-footer">
 						<div class="row">
@@ -252,7 +270,7 @@
 						Username
 					</div>
 					<div class="card-body">
-						<img src="https://picsum.photos/3000/3000?random">
+						<img src="https://picsum.photos/300/300?random">
 					</div>
 					<div class="card-footer">
 						<div class="row">
@@ -277,7 +295,7 @@
 						Username
 					</div>
 					<div class="card-body">
-						<img src="https://picsum.photos/2000/3000?random">
+						<img src="https://picsum.photos/200/300?random">
 					</div>
 					<div class="card-footer">
 						<div class="row">
@@ -302,7 +320,7 @@
 						Username
 					</div>
 					<div class="card-body">
-						<img src="https://picsum.photos/3000/2000?random">
+						<img src="https://picsum.photos/300/200?random">
 					</div>
 					<div class="card-footer">
 						<div class="row">
@@ -327,7 +345,7 @@
 						Username
 					</div>
 					<div class="card-body">
-						<img src="https://picsum.photos/1000/5000?random">
+						<img src="https://picsum.photos/100/500?random">
 					</div>
 					<div class="card-footer">
 						<div class="row">
@@ -349,6 +367,11 @@
 			</div>
 		</div>
 	</div>
+	<footer class="navbar footer fixed-bottom">
+		<div class="container">
+			Copyright © 2018 | All Rights Reserved.
+		</div>
+	</footer>
 </body>
 
 </html>

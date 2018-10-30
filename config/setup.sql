@@ -1,4 +1,5 @@
-CREATE TABLE IF NOT EXISTS `users` (
+DROP TABLE IF EXISTS `users`;
+CREATE TABLE `users` (
 	`uuid` CHAR(36) PRIMARY KEY,
 	`email` VARCHAR(191) UNIQUE NOT NULL,
 	`username` VARCHAR(191) UNIQUE NOT NULL,
@@ -6,7 +7,8 @@ CREATE TABLE IF NOT EXISTS `users` (
 	`email_on_comment` BOOL NOT NULL DEFAULT 1
 );
 
-CREATE TABLE IF NOT EXISTS `uploads` (
+DROP TABLE IF EXISTS `uploads`;
+CREATE TABLE `uploads` (
 	`uuid` CHAR(36) PRIMARY KEY,
 	`user` CHAR(36) NOT NULL,
 	`like_count` INT NOT NULL DEFAULT 0,
@@ -15,7 +17,8 @@ CREATE TABLE IF NOT EXISTS `uploads` (
 	FOREIGN KEY (`user`) REFERENCES `users`(`uuid`) ON DELETE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS `comments` (
+DROP TABLE IF EXISTS `comments`;
+CREATE TABLE `comments` (
 	`upload` CHAR(36) NOT NULL,
 	`user` CHAR(36) NOT NULL,
 	`text` TEXT NOT NULL,
@@ -25,6 +28,7 @@ CREATE TABLE IF NOT EXISTS `comments` (
 	FOREIGN KEY (`upload`) REFERENCES `uploads`(`uuid`) ON DELETE CASCADE
 );
 
+DROP TABLE IF EXISTS `likes`;
 CREATE TABLE IF NOT EXISTS `likes` (
 	`upload` CHAR(36) NOT NULL,
 	`user` CHAR(36) NOT NULL,
@@ -34,21 +38,24 @@ CREATE TABLE IF NOT EXISTS `likes` (
 	FOREIGN KEY (`upload`) REFERENCES `uploads`(`uuid`) ON DELETE CASCADE
 );
 
+
+DROP TRIGGER IF EXISTS LIKE_INCREMENT;
 CREATE TRIGGER LIKE_INCREMENT AFTER INSERT ON `likes`
 FOR EACH ROW
 	UPDATE `uploads` SET `like_count` = `like_count` + 1
 	WHERE `uuid` = NEW.`upload`;
- 
+
+DROP TRIGGER IF EXISTS COMMENT_INCREMENT;
 CREATE TRIGGER COMMENT_INCREMENT AFTER INSERT ON `comments`
 FOR EACH ROW
 	UPDATE `uploads` SET `comment_count` = `comment_count` + 1
 	WHERE `uuid` = NEW.`upload`;
-
+DROP TRIGGER IF EXISTS LIKE_DECREMENT;
 CREATE TRIGGER LIKE_DECREMENT AFTER DELETE ON `likes`
 FOR EACH ROW
 	UPDATE `uploads` SET `like_count` = `like_count` - 1
 	WHERE `uuid` = OLD.`upload`;
- 
+DROP TRIGGER IF EXISTS COMMENT_DECREMENT;
 CREATE TRIGGER COMMENT_DECREMENT AFTER DELETE ON `comments`
 FOR EACH ROW
 	UPDATE `uploads` SET `comment_count` = `comment_count` - 1
