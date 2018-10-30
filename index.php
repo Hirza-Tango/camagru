@@ -1,17 +1,14 @@
 <?php
 require_once('Model/sql_prepare.php');
 print_r($_POST);
+echo "<br>";
 if (isset($_POST['login'])) {
 	try {
-		$sql_get_login->execute(Array(":email"=>$_POST["email"], "pass"=>$_POST["password"]));
+		$sql_get_login->execute(Array(":email"=>$_POST["email"], ":pass"=>$_POST["password"]));
 		echo $sql_get_login->fetchAll(PDO::FETCH_ASSOC), PHP_EOL;
 	} catch (PDOException $p) {
 		echo $p->getMessage(), PHP_EOL;
 	}
-}
-else if (isset($_POST['register']))
-{
-
 }
 ?><!doctype html>
 <html lang="en">
@@ -20,7 +17,9 @@ else if (isset($_POST['register']))
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 	<style>
 	.card-body img {
-	    height: 100%;
+	    /*height: 100%;*/
+		max-height: 70vh;
+		object-fit: contain;
     	width: 100%;
     	display: table-cell;
 		vertical-align: middle;
@@ -42,8 +41,8 @@ else if (isset($_POST['register']))
 			<img src="https://vectr.com/hirza_tango/o1dtN6CW2P.svg" width="40" height="40" alt="">
 			Camagru
 		</a>
-		<div class="form-row">
-			<form action="index.php" method="post">
+		<div class="row">
+			<form class="form-row" action="#" method="post">
 				<div class="col-auto">
 					<input type="text" class="form-control" placeholder="Email" name="email">
 				</div>
@@ -54,11 +53,12 @@ else if (isset($_POST['register']))
 				<div class="col-auto">
 					<button class="btn btn-primary" type="submit" name="login">Login</button>
 				</div>
-			
-				<div class="col-auto">
-					<button class="btn btn-secondary" type="submit" name="register">Register</button>
-				</div>
 			</form>
+			<div class="col-auto">
+					<a href="/register.php">
+						<button class="btn btn-secondary">Register</button>
+					</a>
+			</div>
 		</div>
 	</nav>
 	<div class="container">
