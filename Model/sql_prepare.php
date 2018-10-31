@@ -1,5 +1,5 @@
 <?php
-require_once("config/database.php");
+require_once($_SERVER['DOCUMENT_ROOT'].'/config/database.php');
 
 $sql_get_gallery_page = $db->prepare('
 	SELECT
@@ -28,7 +28,7 @@ $sql_get_login = $db->prepare('
 	FROM
 		`users`
 	WHERE
-		email = :email
+		(email = :email or username = :username)
 		AND password = :pass
 ');
 
@@ -94,4 +94,6 @@ $sql_delete_like = $db->prepare('
 	WHERE `user` = :user
 	AND `upload` = :upload
 ');
+#TODO: proper init file
+session_start();
 ?>

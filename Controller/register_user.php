@@ -1,43 +1,43 @@
 <?php
-require_once('Model/sql_prepare.php');
-
+require_once($_SERVER['DOCUMENT_ROOT'].'/Model/sql_prepare.php');
 function display_error($message){
 	#TODO: do this properly
-	header("400");
+	echo $message;
+	error_log($message . PHP_EOL, 3, "log.log");
+	header("Location: /");
+	exit();
 }
 
 function input_clean($input){
 	if (!isset($input))
 		return $input;
-	return trim(stripslashes(htmlspecialchars($data)));
+	return trim(stripslashes(htmlspecialchars($input)));
 }
 
 $username = input_clean($_POST['username']);
 $email = input_clean($_POST['email']);
 $password = input_clean($_POST['password']);
-$confirm_password = input_clean($POST['confirm_password']);
+$confirm_password = input_clean($_POST['confirm_password']);
 
 if (!(isset($username) && isset($email) &&
-	isset($password) && isset($password)))
-	display_error();
-else if (!preg_match('/^[a-zA-Z0-9._]{8,}$/', $username))
-	display_error();
+	isset($password) && isset($confirm_password)))
+	display_error("Missing field");
+else if (!preg_match('/^[a-zA-Z0-9._]{8,}/', $username))
+	display_error($username);
 else if (!filter_var($email, FILTER_VALIDATE_EMAIL))
-	display_error();
-else if (!preg_match('/^.{8,}$/', $password))
-	display_error();
-else if (!preg_match('/^.{8,}$/', $confirm_password))
-	display_error();
+	display_error("Bad email");
+else if (!preg_match('/^.{8,}/', $password))
+	display_error("Bad password 1");
+else if (!preg_match('/^.{8,}/', $confirm_password))
+	display_error("Bad password 2");
 else if ($password !== $confirm_password)
-	display_error();
+	display_error("Passwords don't match");
 try {
 	$sql_post_user->execute(Array(":username"=>$username, ":email"=>$email, ":password"=>hash("SHA512", $password)));
-	$sql_post_user->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e){
 	#TODO: better
-	die();
+	display_error(var_dump($e));
 }
-
-
-
+#TODO: show status
+header("Location: /");
 ?>
