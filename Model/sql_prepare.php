@@ -94,6 +94,4 @@ $sql_delete_like = $db->prepare('
 	WHERE `user` = :user
 	AND `upload` = :upload
 ');
-#TODO: proper init file
-session_start();
 ?>

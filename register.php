@@ -9,6 +9,7 @@
 				<div class="form-group">
 					<input type="email" class="form-control" placeholder="Email" name="email" required>
 				</div>
+				<!-- TODO: update regex -->
 				<div class="form-group">
 					<input type="password" class="form-control" placeholder="Password" name="password" required pattern="^.{8,}$" title="Password must be at least 8 characters long">
 				</div>

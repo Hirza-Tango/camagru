@@ -1,18 +1,5 @@
 <?php
-require_once($_SERVER['DOCUMENT_ROOT'].'/Model/sql_prepare.php');
-function display_error($message){
-	#TODO: do this properly
-	echo $message;
-	error_log($message . PHP_EOL, 3, "log.log");
-	header("Location: /");
-	exit();
-}
-
-function input_clean($input){
-	if (!isset($input))
-		return $input;
-	return trim(stripslashes(htmlspecialchars($input)));
-}
+require_once($_SERVER['DOCUMENT_ROOT'].'/init.php');
 
 $username = input_clean($_POST['username']);
 $email = input_clean($_POST['email']);
@@ -33,7 +20,7 @@ else if (!preg_match('/^.{8,}/', $confirm_password))
 else if ($password !== $confirm_password)
 	display_error("Passwords don't match");
 try {
-	$sql_post_user->execute(Array(":username"=>$username, ":email"=>$email, ":password"=>hash("SHA512", $password)));
+	$sql_post_user->execute(Array(":username"=>$username, ":email"=>$email, ":password"=>password_hash($password, PASSWORD_BCRYPT)));
 } catch (PDOException $e){
 	#TODO: better
 	display_error(var_dump($e));

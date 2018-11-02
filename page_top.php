@@ -1,9 +1,10 @@
 <?php
-require_once($_SERVER['DOCUMENT_ROOT'].'/Model/sql_prepare.php');
+require_once($_SERVER['DOCUMENT_ROOT'].'/init.php');
 if (isset($_POST['login'])) {
 	#TODO: form validation
+	#TODO: HMAC
 	try {
-		$sql_get_login->execute(Array(":email"=>$_POST["email"], "pass"=>hash("sha512",$_POST["password"]), ":username"=>$_POST["email"]));
+		$sql_get_login->execute(Array(":email"=>$_POST["email"], "pass"=>password_hash($_POST["password"]), ":username"=>$_POST["email"]));
 		$result = $sql_get_login->fetch(PDO::FETCH_ASSOC);
 		if (!empty($result))
 			$_SESSION['user'] = $result;
@@ -30,8 +31,9 @@ if (isset($_POST['login'])) {
 	<title>Camagru</title>
 </head>
 <body>
+	<?php echo "DEBUG:", var_dump($_SESSION['user']);?>
 	<nav class="navbar navbar-dark bg-dark sticky-top">
-		<a class="navbar-brand" href="#">
+		<a class="navbar-brand" href="/">
 			<img src="https://vectr.com/hirza_tango/o1dtN6CW2P.svg" width="40" height="40" alt="">
 			Camagru
 		</a>
@@ -59,7 +61,9 @@ if (isset($_POST['login'])) {
 			<div class="row">
 				<div class="col-auto">
 				<!-- TODO: link to profile editing -->
-					<p style="color:white">Hi, <b><?= $_SESSION['user']['username'];?></b></p>
+					<a href="/profile.php">
+						<p style="color:white">Hi, <b><?= $_SESSION['user']['username'];?></b></p>
+					</a>
 				</div>
 			</div>
 		<?php } ?>
