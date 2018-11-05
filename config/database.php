@@ -1,7 +1,7 @@
 <?php
-$DB_DSN = 'mysql:unix_socket=/goinfre/dslogrov/MAMP/mysql/tmp/mysql.sock;dbname=dslogrov_camagru;';
+$DB_DSN = 'mysql:unix_socket=/var/run/mysqld/mysqld.sock;dbname=dslogrov_camagru;';
 $DB_USER = 'root';
-$DB_PASSWORD = 'toortoor';
+$DB_PASSWORD = 'toor';
 try {
 	$db = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
 	$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
