@@ -2,6 +2,7 @@
 	<div class="container">
 		<h2 class="text-center">Update details</h2>
 		<div class="row justify-content-center">
+			<!-- TODO: allow modify email -->
 			<form action="/Controller/update_profile.php" method="post">
 				<div class="form-group">
 					<label>Username</label>

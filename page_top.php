@@ -4,17 +4,11 @@ require_once($_SERVER['DOCUMENT_ROOT'].'/init.php');
 <html lang="en">
 <head>
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+	<link rel="stylesheet" href="/bootstrap.min.css">
 	<link rel="stylesheet" href="/style.css">
-	<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-	<link rel="manifest" href="/site.webmanifest">
-	<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
-	<meta name="apple-mobile-web-app-title" content="Camagru">
 	<meta name="application-name" content="Camagru">
-	<meta name="msapplication-TileColor" content="#da532c">
-	<meta name="theme-color" content="#ffffff">
 	<title>Camagru</title>
 </head>
 <body>
@@ -46,6 +40,9 @@ require_once($_SERVER['DOCUMENT_ROOT'].'/init.php');
 			</div>
 		<?php } else { ?>
 			<div class="row">
+				<div class="col-auto">
+					<a href="/upload.php">Upload</a>
+				</div>
 				<div class="col-auto">
 					<a href="/profile.php">
 						<p style="color:white">Hi, <b><?= $_SESSION['user']['username'];?></b></p>
