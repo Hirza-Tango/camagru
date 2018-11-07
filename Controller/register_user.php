@@ -6,25 +6,27 @@ $email = input_clean($_POST['email']);
 $password = input_clean($_POST['password']);
 $confirm_password = input_clean($_POST['confirm_password']);
 
-if (!(isset($username) && isset($email) &&
-	isset($password) && isset($confirm_password)))
+if (!(isset($username, $email, $password, $confirm_password)))
 	display_error("Missing field");
 else if (!preg_match('/^[a-zA-Z0-9._]{8,}/', $username))
-	display_error($username);
+	display_error("Bad Username");
 else if (!filter_var($email, FILTER_VALIDATE_EMAIL))
 	display_error("Bad email");
 else if (!preg_match('/^.{8,}/', $password))
-	display_error("Bad password 1");
+	display_error("Bad password");
 else if (!preg_match('/^.{8,}/', $confirm_password))
-	display_error("Bad password 2");
+	display_error("Bad password");
 else if ($password !== $confirm_password)
 	display_error("Passwords don't match");
 try {
 	$sql_post_user->execute(Array(":username"=>$username, ":email"=>$email, ":password"=>password_hash($password, PASSWORD_BCRYPT)));
 } catch (PDOException $e){
-	#TODO: better
-	display_error(var_dump($e));
+	if ($e->getCode() == 23000)
+		display_error("User already exists");
+	else
+		display_error("Could not register user");
 }
-#TODO: show status
+#TODO: send email
+display_status("Registered successfully");
 header("Location: /");
 ?>

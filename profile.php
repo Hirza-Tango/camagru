@@ -7,12 +7,8 @@
 					<label>Username</label>
 					<input type="text" class="form-control" value=<?php echo $_SESSION['user']['username'];?> name="username" pattern="^[a-zA-Z0-9._]{8,}$" title="Username must be at least 8 characters long and contain only lower or uppercase letters, ., _ or digits" required>
 				</div>
-				<div class="form-group">
-					<label>Email</label>
-					<input type="email" class="form-control" value=<?php echo $_SESSION['user']['email'];?> name="email" required>
-				</div>
 				<div class="form-check">
-					<input type="checkbox" class="form-check-input" <?php if($_SESSION['user']["email_on_comment"] == "1") echo "checked"; ?>>
+					<input type="checkbox" class="form-check-input" name="email_on_comment" <?php if($_SESSION['user']['email_on_comment'] == "1") echo "checked"; ?>>
 					<label>Send me an email when someone<br>comments on my picture</label>
 				</div>
 				<div class="form-group">

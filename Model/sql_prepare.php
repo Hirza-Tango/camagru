@@ -24,14 +24,20 @@ $sql_get_upload_comments = $db->prepare('
 ');
 $sql_get_login = $db->prepare('
 	SELECT
-		`uuid`, `email`, `username`, `email_on_comment`
+		`uuid`, `email`, `username`, `email_on_comment`, `password`
 	FROM
 		`users`
 	WHERE
-		(email = :email or username = :username)
-		AND password = :pass
+		(email = :email OR username = :username);
 ');
-
+$sql_get_password = $db->prepare('
+	SELECT
+		`password`
+	FROM
+		`users`
+	WHERE
+		`uuid` = :uuid;
+');
 $sql_post_user = $db->prepare('
 	INSERT INTO `users`
 		(`uuid`,`email`,`username`,`password`)
@@ -61,16 +67,15 @@ $sql_post_like = $db->prepare('
 $sql_update_user = $db->prepare('
 	UPDATE `users` SET
 		`username`= :username,
-		`email`= :newemail,
 		`email_on_comment`= :email_on_comment
 	WHERE
-		`uuid` = :user
+		`uuid` = :user;
 ');
 $sql_update_password = $db->prepare('
 	UPDATE `users` SET
-		`password`= :newpass,
+		`password`= :newpass
 	WHERE
-		`uuid` = :user
+		`uuid` = :user;
 ');
 $sql_update_comment = $db->prepare('
 	UPDATE `comments` SET

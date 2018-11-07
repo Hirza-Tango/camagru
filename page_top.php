@@ -1,18 +1,5 @@
 <?php
 require_once($_SERVER['DOCUMENT_ROOT'].'/init.php');
-if (isset($_POST['login'])) {
-	#TODO: form validation
-	#TODO: HMAC
-	try {
-		$sql_get_login->execute(Array(":email"=>$_POST["email"], "pass"=>password_hash($_POST["password"]), ":username"=>$_POST["email"]));
-		$result = $sql_get_login->fetch(PDO::FETCH_ASSOC);
-		if (!empty($result))
-			$_SESSION['user'] = $result;
-	} catch (PDOException $p) {
-		echo $p->getMessage(), PHP_EOL;
-		die();
-	}
-}
 ?><!doctype html>
 <html lang="en">
 <head>
@@ -31,7 +18,7 @@ if (isset($_POST['login'])) {
 	<title>Camagru</title>
 </head>
 <body>
-	<?php echo "DEBUG:", var_dump($_SESSION['user']);?>
+	<?php echo "DEBUG:", var_dump($_SESSION);?>
 	<nav class="navbar navbar-dark bg-dark sticky-top">
 		<a class="navbar-brand" href="/">
 			<img src="https://vectr.com/hirza_tango/o1dtN6CW2P.svg" width="40" height="40" alt="">
@@ -39,7 +26,7 @@ if (isset($_POST['login'])) {
 		</a>
 		<?php if (!isset($_SESSION['user'])) { ?>
 			<div class="row">
-				<form class="form-row" action="#" method="post">
+				<form class="form-row" action="/login.php" method="post">
 					<div class="col-auto">
 						<input type="text" class="form-control" placeholder="Email or Username" name="email" required pattern="(^[a-zA-Z0-9._]{8,}$)|(^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$)">
 					</div>
@@ -52,19 +39,32 @@ if (isset($_POST['login'])) {
 					</div>
 				</form>
 				<div class="col-auto">
-						<a href="/register.php">
-							<button class="btn btn-secondary">Register</button>
-						</a>
+					<a href="/register.php">
+						<button class="btn btn-secondary">Register</button>
+					</a>
 				</div>
 			</div>
 		<?php } else { ?>
 			<div class="row">
 				<div class="col-auto">
-				<!-- TODO: link to profile editing -->
 					<a href="/profile.php">
 						<p style="color:white">Hi, <b><?= $_SESSION['user']['username'];?></b></p>
 					</a>
 				</div>
+				<a href="/logout.php">
+					<button class="btn btn-secondary">Logout</button>
+				</a>
 			</div>
 		<?php } ?>
 	</nav>
+	<?php if (isset($_SESSION['last_error'])) { ?>
+		<div class="alert alert-danger">
+			<?php echo $_SESSION['last_error']; ?>
+		</div>
+	<?php unset($_SESSION['last_error'], $_SESSION['last_status']);} else if (isset($_SESSION['last_status'])) { ?>
+		<div class="alert alert-success">
+			<?php echo $_SESSION['last_status']; ?>
+		</div>
+	<?php unset($_SESSION['last_status']); } ?>
+	<!-- TODO: Dismissable / auto-dismiss alerts with animation -->
+		
