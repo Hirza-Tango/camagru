@@ -125,28 +125,27 @@ function layer(element) {
 function upload_overlay(){
 	let cam = document.getElementById("webcam");
 	let image = document.getElementById("select");
-	/* TODO: resolve params from overlaid images, uploaded image and/or snapshot*/
 
 	let hiddenCanvas = document.createElement("canvas");
 	hiddenCanvas.setAttribute("type", "hidden");
 	let context = hiddenCanvas.getContext("2d");
 
-	if (image.style.display="block")
-	{
-		context.width = image.naturalWidth;
-		context.height = image.naturalHeight;
+	if (image.style.display == "block")
+	{	
+		hiddenCanvas.height = context.height = image.naturalHeight;
+		hiddenCanvas.width = context.width = image.naturalWidth;
 		context.drawImage(image, 0, 0);
 	}
-	else if (cam.style.display="block") {
-		context.width = cam.naturalWidth;
-		context.height = cam.naturalHeight;
+	//TODO: wait for cam to load
+	else if (cam.style.display == "block") {
+		hiddenCanvas.width = context.width = cam.videoWidth;
+		hiddenCanvas.height = context.height = cam.videoHeight;
 		context.drawImage(cam, 0, 0);
 	}
 	let params = {
 		image: hiddenCanvas.toDataURL(),
 		overlays: Array.from(document.getElementsByClassName("overlay"), x => x.getAttribute("src"))
 	};
-	console.log(params);
     var form = document.createElement("form");
     form.setAttribute("method", "post");
     form.setAttribute("action", "/Controller/upload_image.php");
@@ -163,7 +162,7 @@ function upload_overlay(){
     }
 
     document.body.appendChild(form);
-    //form.submit();
+    form.submit();
 }
 </script>
 <?php include($_SERVER['DOCUMENT_ROOT']."/page_bottom.php");?>
