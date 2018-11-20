@@ -1,5 +1,5 @@
 <?php include($_SERVER['DOCUMENT_ROOT']."/page_top.php");?>
-<?php if (!isset($_SESSION['user'])) {header("Location: /");} ?>
+<?php if (!isset($_SESSION['user'])) { display_error("Users cannot upload without logging in!");}?>
 <div class="container">
 	<div class="row">
 		<div class="col-10 bg-light">

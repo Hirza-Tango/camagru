@@ -37,6 +37,8 @@ function imagecopymerge_alpha($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, 
 foreach ($overlays as $value) {
 	$file = file_get_contents($value);
 	$new = imagecreatefromstring(file_get_contents($value));
+	if ($new === false)
+		display_error("Could not load overlay");
 	if (imagesy($new) > imagesy($base)) {
 		$tmp = imagescale($new, (imagesx($new) / imagesy($new)) * imagesy($base), imagesy($base));
 		imagedestroy($new);
@@ -52,8 +54,20 @@ foreach ($overlays as $value) {
 	imagecopymerge_alpha($base, $new, (imagesx($base) - imagesx($new)) / 2, (imagesy($base) - imagesy($new)) / 2, 0, 0, imagesx($new), imagesy($new), 100);
 	imagedestroy($new);
 }
-header("Content-Type: image/png");
-imagepng($base);
-imagedestroy($base);
-
+try {
+	$db->beginTransaction();
+	$sql_post_upload->execute(Array(":user"=>$_SESSION['user']['uuid']));
+	$sql_get_last_upload->execute(Array(":user"=>$_SESSION['user']['uuid']));
+	$filename = $sql_get_last_upload->fetch(PDO::FETCH_ASSOC)['uuid'] . '.png';
+} catch (PDOException $e) {
+	$db->rollback();
+	display_error("Could not upload. Please retry");
+}
+if (!imagepng($base, $_SERVER['DOCUMENT_ROOT'].'//Image//'.$filename)) {
+	$db->rollback();
+	display_error("Could not upload. Please retry");
+}
+$db->commit();
+display_status("Image successfully uploaded");
+header("Location: /");
 ?>

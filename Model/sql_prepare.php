@@ -38,6 +38,16 @@ $sql_get_password = $db->prepare('
 	WHERE
 		`uuid` = :uuid;
 ');
+$sql_get_last_upload = $db->prepare('
+	SELECT
+		`uuid`
+	FROM
+		`uploads`
+	WHERE
+		`user` = :user
+	ORDER BY `created` DESC
+	LIMIT 1;
+');
 $sql_post_user = $db->prepare('
 	INSERT INTO `users`
 		(`uuid`,`email`,`username`,`password`)
@@ -67,6 +77,7 @@ $sql_post_like = $db->prepare('
 $sql_update_user = $db->prepare('
 	UPDATE `users` SET
 		`username`= :username,
+		`email`= :email,
 		`email_on_comment`= :email_on_comment
 	WHERE
 		`uuid` = :user;
