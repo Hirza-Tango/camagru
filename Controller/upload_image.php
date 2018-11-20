@@ -37,9 +37,8 @@ function imagecopymerge_alpha($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, 
 foreach ($overlays as $value) {
 	$file = file_get_contents($value);
 	$new = imagecreatefromstring(file_get_contents($value));
-	//TODO: fix scaling properly
 	if (imagesy($new) > imagesy($base)) {
-		$tmp = imagescale($new, (imagesy($new) / imagesx($new)) * imagesy($base), imagesy($base));
+		$tmp = imagescale($new, (imagesx($new) / imagesy($new)) * imagesy($base), imagesy($base));
 		imagedestroy($new);
 		$new = $tmp;
 	}
