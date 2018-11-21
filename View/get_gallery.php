@@ -3,7 +3,7 @@ require_once($_SERVER['DOCUMENT_ROOT'].'/init.php');
 function get_gallery(int $start = 0, int $size = 5){
 	global $sql_get_gallery_page;
 	try {
-		$sql_get_gallery_page->execute(Array(":start"=>$start, ":page_size"=>$size));
+		$sql_get_gallery_page->execute(Array(":start"=>$start, ":page_size"=>$size, ":user"=>$_SESSION['user']['uuid']));
 		$page = $sql_get_gallery_page->fetchAll(PDO::FETCH_ASSOC);
 	} catch (PDOException $e) {
 		http_response_code(500);
@@ -21,10 +21,10 @@ function get_gallery(int $start = 0, int $size = 5){
 	<div class="card-footer">
 		<div class="row">
 			<!--TODO: onclick for these-->
-			<div class="col text-center" onclick="update_likes(this)">
-					<span class="heart" style="display:inline-block">❤️</span>
-					<span class="unheart" style="display:none">💔</span>
-					<span class="text"><?php echo $p['like_count'];?></span>
+			<div class="col text-center" <?php if (isset($_SESSION['user'])) echo 'onclick="update_likes(this)"'?>>
+				<span class="heart" style=<?php if (!$p['is_liked']) echo '"display:inline-block"'; else echo '"display:none"';?>>❤️</span>
+				<span class="unheart" style=<?php if ($p['is_liked']) echo '"display:inline-block"'; else echo '"display:none"';?>>💔</span>
+				<span class="text"><?php echo $p['like_count'];?></span>
 			</div>
 			<div class="col text-center">
 				<a href=<?php echo '"/image.php?image=' . $p['uuid'] . '"'; ?>>
@@ -40,37 +40,54 @@ function get_gallery(int $start = 0, int $size = 5){
 	</div>
 </div>
 <!--TODO:move script to index -->
-<script>
-//TODO: this
-function update_likes(e) {
-	if (e.querySelector(".unheart").style.display == "none")
-	{
-		//Send like
-		let success;
-		console.log("Sending like");
-		try {
-			fetch('/Controller/like.php', {
-				method: "POST",
-				//TODO: get user_id and upload_id
-				body: "",
-				headers: {"Content-Type": "application/x-www-form-urlencoded"}
-			})
-			.then(function(response) { return response.text;})
-			.then(function(text) { success = parseInt(text);});
-			//if (success !== "1") return;
-			e.querySelector(".heart").style.display = "none";
-			e.querySelector(".unheart").style.display = "inline-block";
-			let number = e.querySelector(".text").childNodes[0];
-			number.nodeValue = parseInt(number.nodeValue) + 1;
-		} catch (error) {}
-	}
-	else
-	{
-		//unsend like
-	}
-}
-</script>
-<?php
+		<?php if(isset($_SESSION['user'])) { ?>
+		<script>
+		//TODO: Check if like at start
+		function update_likes(e) {
+			if (e.querySelector(".unheart").style.display == "none")
+			{
+				try {
+					let body = <?php echo '"user=', $_SESSION['user']['uuid'], '&upload="'?> + e.parentNode.parentNode.parentNode.id;
+					let prom = fetch('/Controller/like.php', {
+						method: "POST",
+						"body": body,
+						headers: {"Content-Type": "application/x-www-form-urlencoded"}
+					})
+					.then(function(response) { return response.text();})
+					.then(function(text) { return parseInt(text);})
+					.then(function(value) {
+						if (value !== 1) return;
+						e.querySelector(".heart").style.display = "none";
+						e.querySelector(".unheart").style.display = "inline-block";
+						let number = e.querySelector(".text").childNodes[0];
+						number.nodeValue = parseInt(number.nodeValue) + 1;
+					});
+				} catch (error) {}
+			}
+			else
+			{
+				try {
+					let body = <?php echo '"user=', $_SESSION['user']['uuid'], '&upload="'?> + e.parentNode.parentNode.parentNode.id;
+					let prom = fetch('/Controller/unlike.php', {
+						method: "POST",
+						"body": body,
+						headers: {"Content-Type": "application/x-www-form-urlencoded"}
+					})
+					.then(function(response) { return response.text();})
+					.then(function(text) { return parseInt(text);})
+					.then(function(value) {
+						if (value !== 1) return;
+						e.querySelector(".heart").style.display = "inline-block";
+						e.querySelector(".unheart").style.display = "none";
+						let number = e.querySelector(".text").childNodes[0];
+						number.nodeValue = parseInt(number.nodeValue) - 1;
+					});
+				} catch (error) {}
+			}
+		}
+		</script>
+		<?php
+		}
 	}
 }
 ?>

@@ -3,7 +3,7 @@ require_once($_SERVER['DOCUMENT_ROOT'].'/config/database.php');
 
 $sql_get_gallery_page = $db->prepare('
 	SELECT
-		a.`uuid`, a.`like_count`, a.`comment_count`, a.`created`, b.username as username
+		a.`uuid`, a.`like_count`, a.`comment_count`, a.`created`, b.username as username, (SELECT 1 FROM `likes` WHERE `upload` = a.`uuid` AND `user` = :user) as is_liked
 	FROM
 		`uploads` as a
 	JOIN
