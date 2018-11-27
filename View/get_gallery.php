@@ -43,4 +43,10 @@ function get_gallery(int $start = 0, int $size = 5){
 	<?php
 	}
 }
+function count_gallery($size){
+	//TODO: check
+	$sql_get_gallery_size->execute();
+	$value = $sql_get_gallery_size->fetchAll(PDO::FETCH_ASSOC)[0]['count'];
+	return (intval($count/$size));
+}
 ?>

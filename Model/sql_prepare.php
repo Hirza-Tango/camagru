@@ -12,6 +12,12 @@ $sql_get_gallery_page = $db->prepare('
 		a.`created` DESC
 	LIMIT :start, :page_size
 ');
+$sql_get_gallery_size = $db->prepare('
+	SELECT
+		COUNT(*) as count
+	FROM
+		`uplaods`
+');
 $sql_get_image = $db->prepare('
 	SELECT
 		a.`uuid`, a.`like_count`, a.`comment_count`, a.`created`, b.username as username, (SELECT 1 FROM `likes` WHERE `upload` = a.`uuid` AND `user` = :user) as is_liked
