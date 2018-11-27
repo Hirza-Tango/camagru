@@ -9,18 +9,17 @@
 				<div class="form-group">
 					<input type="email" class="form-control" placeholder="Email" name="email" required>
 				</div>
-				<!-- TODO: update regex -->
 				<div class="form-group">
-					<input type="password" class="form-control" placeholder="Password" name="password" required pattern="^.{8,}$" title="Password must be at least 8 characters long">
+					<input id="password" type="password" class="form-control" placeholder="Password" name="password" required pattern="^(?=.*\d)[a-zA-Z\d]{8,}$" title="Password must be at least 8 characters long and have at least 1 digit">
 				</div>
 				<div class="form-group">
-					<input type="password" class="form-control" placeholder="Confirm Password" name="confirm_password" required pattern="^.{8,}$" title="Password must be at least 8 characters long">
+					<input id="confirm_password" type="password" class="form-control" placeholder="Confirm Password" name="confirm_password" required pattern="^(?=.*\d)[a-zA-Z\d]{8,}$" title="Password must be at least 8 characters long and have at least 1 digit">
 				</div>
-				<!--TODO: javascript-level confirm password similarity-->
 				<div class="form-group">
 					<button class="btn btn-primary" type="submit" name="register">Register</button>
 				</div>
 			</form>
 		</div>
 	</div>
+
 <?php include($_SERVER['DOCUMENT_ROOT']."/page_bottom.php");?>

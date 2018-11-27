@@ -4,7 +4,8 @@ CREATE TABLE `users` (
 	`email` VARCHAR(191) UNIQUE NOT NULL,
 	`username` VARCHAR(191) UNIQUE NOT NULL,
 	`password` CHAR(128) NOT NULL,
-	`email_on_comment` BOOL NOT NULL DEFAULT 1
+	`email_on_comment` BOOL NOT NULL DEFAULT 1,
+	`validation_required` CHAR(10) NULL
 );
 
 DROP TABLE IF EXISTS `uploads`;

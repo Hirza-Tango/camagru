@@ -7,11 +7,11 @@ $confirm_password = input_clean($_POST['confirm_password']);
 
 if (!(isset($old_password, $new_password, $confirm_password)))
 	display_error("Missing field");
-else if (!preg_match('/^.{8,}/', $old_password))
+else if (!preg_match('/^(?=.*\d)[a-zA-Z\d]{8,}/', $old_password))
 	display_error("Bad password");
-else if (!preg_match('/^.{8,}/', $new_password))
+else if (!preg_match('/^(?=.*\d)[a-zA-Z\d]{8,}/', $new_password))
 	display_error("Bad password");
-else if (!preg_match('/^.{8,}/', $confirm_password))
+else if (!preg_match('/^(?=.*\d)[a-zA-Z\d]{8,}/', $confirm_password))
 	display_error("Bad password");
 else if ($new_password !== $confirm_password)
 	display_error("Passwords don't match");
@@ -27,7 +27,7 @@ else try {
 try {
 	$sql_update_password->execute(Array(":newpass"=>password_hash($new_password, PASSWORD_BCRYPT), ":user"=>$_SESSION['user']['uuid']));
 } catch (PDOException $e) {
-	display_error("DEBUG: ".$e->getMessage());
+	display_error("Could not update password");
 }
 display_status("Password Successfully updated");
 header("Location: /");

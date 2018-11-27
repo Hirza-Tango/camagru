@@ -5,8 +5,9 @@ ini_set('display_startup_errors', 1);
 ini_set('display_errors', 1);
 error_reporting(-1);
 //END_DEBUG
+ini_set('sendmail_path', '"env -i /usr/sbin/sendmail -t -i"');
+ini_set('sendmail_from', 'no-reply@camagru.com');
 session_start();
-$hmac_secret = "I can't believe it's not sodium chloride, is this a game that isn't the league of legends?";
 
 function display_error(string $message){
 	error_log($message . PHP_EOL, 3, $_SERVER['DOCUMENT_ROOT']."/log.log");
@@ -33,4 +34,6 @@ function is_uuid(string $s){
 		return true;
 	return false;
 }
+
+
 ?>

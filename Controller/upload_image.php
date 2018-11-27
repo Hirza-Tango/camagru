@@ -1,6 +1,5 @@
 <?php
 require_once($_SERVER['DOCUMENT_ROOT'].'/init.php');
-//TODO: image type checking
 $base = preg_replace('/^data:image\/\w+;base64,/', '', $_POST['image']);
 $base = base64_decode($base);
 if ($base === false)
@@ -10,35 +9,12 @@ if ($base === false)
 	display_error("Could not load image");
 
 $overlays = explode(',', $_POST['overlays']);
-/** 
-* PNG ALPHA CHANNEL SUPPORT for imagecopymerge(); 
-* by Sina Salek 
-* 
-* Bugfix by Ralph Voigt (bug which causes it 
-* to work only for $src_x = $src_y = 0. 
-* Also, inverting opacity is not necessary.) 
-* 08-JAN-2011 
-* 
-**/
-//TODO: refactor this copied code
-function imagecopymerge_alpha($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, $src_w, $src_h, $pct){ 
-	// creating a cut resource 
-	$cut = imagecreatetruecolor($src_w, $src_h);
-
-	// copying relevant section from background to the cut resource 
-	imagecopy($cut, $dst_im, 0, 0, $dst_x, $dst_y, $src_w, $src_h); 
-	
-	// copying relevant section from watermark to the cut resource 
-	imagecopy($cut, $src_im, 0, 0, $src_x, $src_y, $src_w, $src_h); 
-	
-	// insert cut resource to destination image 
-	imagecopymerge($dst_im, $cut, $dst_x, $dst_y, 0, 0, $src_w, $src_h, $pct); 
-}
+error_log(var_export($overlays) . PHP_EOL, 3, $_SERVER['DOCUMENT_ROOT']."/log.log");
 foreach ($overlays as $value) {
-	$file = file_get_contents($value);
 	$new = imagecreatefromstring(file_get_contents($value));
 	if ($new === false)
 		display_error("Could not load overlay");
+	//Scale overlay to appropriate size
 	if (imagesy($new) > imagesy($base)) {
 		$tmp = imagescale($new, (imagesx($new) / imagesy($new)) * imagesy($base), imagesy($base));
 		imagedestroy($new);
@@ -49,10 +25,24 @@ foreach ($overlays as $value) {
 		imagedestroy($new);
 		$new = $tmp;
 	}
-	imagealphablending( $new, false );
-	imagesavealpha( $new, true );
-	imagecopymerge_alpha($base, $new, (imagesx($base) - imagesx($new)) / 2, (imagesy($base) - imagesy($new)) / 2, 0, 0, imagesx($new), imagesy($new), 100);
+	imagealphablending($new, false);
+	imagesavealpha($new, true);
+
+	//This is a workaround for the alpha layer
+	//	Create a truecolor area the same size as the new image
+	$alpha_section = imagecreatetruecolor(imagesx($new), imagesy($new));
+	//	The point where the new image is placed (the middle ish)
+	$new_x = (imagesx($base) - imagesx($new)) / 2;
+	$new_y = (imagesy($base) - imagesy($new)) / 2;
+	//	Copy the base to the truecolor
+	imagecopy($alpha_section, $base, 0, 0, $new_x, $new_y, imagesx($new), imagesy($new));
+	//	Copy the new to the truecolor
+	//		So many zeroes because the new is the same size as the truecolor
+	imagecopy($alpha_section, $new, 0, 0, 0, 0, imagesx($new), imagesy($new));
+	//	Merge the truecolor to preserve alpha
+	imagecopymerge($base, $alpha_section, $new_x, $new_y, 0, 0, imagesx($new), imagesy($new), 100);
 	imagedestroy($new);
+	imagedestroy($alpha_section);
 }
 try {
 	$db->beginTransaction();
@@ -61,13 +51,17 @@ try {
 	$filename = $sql_get_last_upload->fetch(PDO::FETCH_ASSOC)['uuid'] . '.png';
 } catch (PDOException $e) {
 	$db->rollback();
+	imagedestroy($base);
 	display_error("Could not upload. Please retry");
 }
 if (!imagepng($base, $_SERVER['DOCUMENT_ROOT'].'//Image//'.$filename)) {
 	$db->rollback();
+	imagedestroy($base);
 	display_error("Could not upload. Please retry");
 }
 $db->commit();
+imagedestroy($base);
 display_status("Image successfully uploaded");
 header("Location: /");
+#TODO: allow deletion
 ?>

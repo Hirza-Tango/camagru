@@ -25,8 +25,9 @@ require_once($_SERVER['DOCUMENT_ROOT'].'/init.php');
 						<input type="text" class="form-control" placeholder="Email or Username" name="email" required pattern="(^[a-zA-Z0-9._]{8,}$)|(^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$)">
 					</div>
 					<div class="col-auto">
-						<input type="password" class="form-control" placeholder="Password" name="password" required pattern=".{8,}" title="Password must be at least 8 characters long">
+						<input type="password" class="form-control" placeholder="Password" name="password" required pattern=".{8,}" title="Password must be at least 8 characters long and have at least 1 digit">
 						<a href="#">Forgotten password?</a>
+						<!-- TODO: forgot password -->
 					</div>
 					<div class="col-auto">
 						<button class="btn btn-primary" type="submit" name="login">Login</button>
@@ -63,5 +64,50 @@ require_once($_SERVER['DOCUMENT_ROOT'].'/init.php');
 			<?php echo $_SESSION['last_status']; ?>
 		</div>
 	<?php unset($_SESSION['last_status']); } ?>
-	<!-- TODO: Dismissable / auto-dismiss alerts with animation -->
+	<?php if(isset($_SESSION['user'])) { ?>
+	<script>
+	function update_likes(e) {
+		if (e.querySelector(".unheart").style.display == "none")
+		{
+			try {
+				let body = <?php echo '"user=', $_SESSION['user']['uuid'], '&upload="'?> + e.parentNode.parentNode.parentNode.id;
+				let prom = fetch('/Controller/like.php', {
+					method: "POST",
+					"body": body,
+					headers: {"Content-Type": "application/x-www-form-urlencoded"}
+				})
+				.then(function(response) { return response.text();})
+				.then(function(text) { return parseInt(text);})
+				.then(function(value) {
+					if (value !== 1) return;
+					e.querySelector(".heart").style.display = "none";
+					e.querySelector(".unheart").style.display = "inline-block";
+					let number = e.querySelector(".text").childNodes[0];
+					number.nodeValue = parseInt(number.nodeValue) + 1;
+				});
+			} catch (error) {}
+		}
+		else
+		{
+			try {
+				let body = <?php echo '"user=', $_SESSION['user']['uuid'], '&upload="'?> + e.parentNode.parentNode.parentNode.id;
+				let prom = fetch('/Controller/unlike.php', {
+					method: "POST",
+					"body": body,
+					headers: {"Content-Type": "application/x-www-form-urlencoded"}
+				})
+				.then(function(response) { return response.text();})
+				.then(function(text) { return parseInt(text);})
+				.then(function(value) {
+					if (value !== 1) return;
+					e.querySelector(".heart").style.display = "inline-block";
+					e.querySelector(".unheart").style.display = "none";
+					let number = e.querySelector(".text").childNodes[0];
+					number.nodeValue = parseInt(number.nodeValue) - 1;
+				});
+			} catch (error) {}
+		}
+	}
+	</script>
+	<?php } ?>
 		

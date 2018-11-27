@@ -23,9 +23,18 @@
 			</div>
 		</div>
 		<div class="col-2 bg-secondary" style="overflow-y: scroll; height:90vh">
-			<img src="https://openclipart.org/download/265907/boc_puppy_sitting.svg" style="object-fit: contain; width:100%;" id="sticker-1" onclick="layer(this)">
-			<img src="https://openclipart.org/download/267208/Border-43--Arvin61r58.svg" style="object-fit: contain; width:100%;" id="sticker-2" onclick="layer(this)">
+			<img src="http://www.pngmart.com/files/5/Aqua-Border-Frame-PNG-Transparent.png" style="object-fit: contain; width:100%;" id="sticker-1" onclick="layer(this)">
+			<img src="http://www.pngmart.com/files/5/Aqua-Border-Frame-Transparent-Background.png" style="object-fit: contain; width:100%;" id="sticker-2" onclick="layer(this)">
 			<img src="https://techflourish.com/images/fancy-crown-border-clipart-5.png" style="object-fit: contain; width:100%;" id="sticker-3" onclick="layer(this)">
+			<img src="https://i.imgur.com/LZ69tPO.png" style="object-fit: contain; width:100%;" id="sticker-4" onclick="layer(this)">
+			<img src="https://i.imgur.com/QqOSYyw.png" style="object-fit: contain; width:100%;" id="sticker-5" onclick="layer(this)">
+			<img src="https://i.imgur.com/S2dRq30.png" style="object-fit: contain; width:100%;" id="sticker-6" onclick="layer(this)">
+			<img src="https://i.imgur.com/oNWfkgF.png" style="object-fit: contain; width:100%;" id="sticker-7" onclick="layer(this)">
+			<img src="https://i.imgur.com/4W0FCVB.png" style="object-fit: contain; width:100%;" id="sticker-8" onclick="layer(this)">
+			<img src="https://i.imgur.com/Q9XeYpc.png" style="object-fit: contain; width:100%;" id="sticker-9" onclick="layer(this)">
+			<img src="https://i.imgur.com/aXW4czG.png" style="object-fit: contain; width:100%;" id="sticker-10" onclick="layer(this)">
+			<img src="https://i.imgur.com/5ehSLRe.png" style="object-fit: contain; width:100%;" id="sticker-11" onclick="layer(this)">
+			<img src="https://i.imgur.com/frxyGsG.png" style="object-fit: contain; width:100%;" id="sticker-12" onclick="layer(this)">
 		</div>
 	</div>
 </div>
@@ -79,11 +88,9 @@ function open_image(event) {
 		.then(function(stream) {
 			stream.getTracks().forEach(element => {
 				element.stop();
-				console.log(element);
 			});
 		})
 		.catch(function(error) {
-			console.log("Could not disable camera");
 		});
 	}
 	cam.srcObject = null;
@@ -100,7 +107,6 @@ function layer(element) {
 	{
 		dup.remove();
 		//grey button
-		console.log(document.getElementsByClassName('overlay'));
 		if (document.getElementsByClassName('overlay').length === 0)
 			document.getElementById("button-confirm").setAttribute("disabled","");
 	}
@@ -136,7 +142,6 @@ function upload_overlay(){
 		hiddenCanvas.width = context.width = image.naturalWidth;
 		context.drawImage(image, 0, 0);
 	}
-	//TODO: wait for cam to load
 	else if (cam.style.display == "block") {
 		hiddenCanvas.width = context.width = cam.videoWidth;
 		hiddenCanvas.height = context.height = cam.videoHeight;
@@ -160,7 +165,6 @@ function upload_overlay(){
             form.appendChild(hiddenField);
         }
     }
-
     document.body.appendChild(form);
     form.submit();
 }

@@ -2,7 +2,6 @@
 	<div class="container">
 		<h2 class="text-center">Update details</h2>
 		<div class="row justify-content-center">
-			<!-- TODO: allow modify email -->
 			<form action="/Controller/update_profile.php" method="post">
 				<div class="form-group">
 					<label>Username</label>
@@ -33,7 +32,6 @@
 				<div class="form-group">
 					<input type="password" class="form-control" placeholder="Confirm new Password" name="confirm_password" required pattern="^.{8,}$" title="Password must be at least 8 characters long">
 				</div>
-				<!--TODO: javascript-level confirm password similarity-->
 				<div class="form-group">
 					<button class="btn btn-primary" type="submit" name="update_password">Update Password</button>
 				</div>
