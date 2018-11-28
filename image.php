@@ -21,6 +21,12 @@ try {
 				<div class="card-header">
 					<img src=<?php echo '"http://loyalkng.com/wp-content/uploads/2010/01/facebook-art-no-photo-image-batman-mickey-mouse-spock-elvis-rick-roll.jpg"'?> height="30" width="30">
 					<?php echo $image['username']?>
+					<?php if ($image['user'] == $_SESSION['user']['uuid']) {?>
+						<a href=
+							<?php echo '"/Controller/delete_image.php?image='.$image['uuid'].'&user='.$_SESSION['user']['uuid'].'"'?>>
+							<img src="https://cdn2.iconfinder.com/data/icons/cleaning-19/30/30x30-10-512.png" style="float: right" width="20" height="20">
+						</a>
+					<?php } ?>
 				</div>
 				<div class="card-body">
 					<img src=<?php echo '"/Image/', $image['uuid'], '.png"'; ?>>

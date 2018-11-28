@@ -7,14 +7,19 @@ if ($base === false)
 $base = imagecreatefromstring($base);
 if ($base === false)
 	display_error("Could not load image");
-
 $overlays = explode(',', $_POST['overlays']);
 error_log(var_export($overlays) . PHP_EOL, 3, $_SERVER['DOCUMENT_ROOT']."/log.log");
 foreach ($overlays as $value) {
 	$new = imagecreatefromstring(file_get_contents($value));
 	if ($new === false)
 		display_error("Could not load overlay");
-	//Scale overlay to appropriate size
+	//This is super inefficient, but I'm lazy, so
+	$tmp = imagescale($new, (imagesx($new) / imagesy($new)) * imagesy($base), imagesy($base));
+	imagedestroy($new);
+	$new = $tmp;
+	$tmp = imagescale($new, imagesx($base));
+	imagedestroy($new);
+	$new = $tmp;
 	if (imagesy($new) > imagesy($base)) {
 		$tmp = imagescale($new, (imagesx($new) / imagesy($new)) * imagesy($base), imagesy($base));
 		imagedestroy($new);
@@ -63,5 +68,4 @@ $db->commit();
 imagedestroy($base);
 display_status("Image successfully uploaded");
 header("Location: /");
-#TODO: allow deletion
 ?>

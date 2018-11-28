@@ -27,7 +27,9 @@ function input_clean($input){
 	return trim(stripslashes(htmlspecialchars($input)));
 }
 
-function is_uuid(string $s){
+function is_uuid($s){
+	if (gettype($s) != "string")
+		return false;
 	if (strlen($s) != 36)
 		return false;
 	if (preg_match('/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i', $s))

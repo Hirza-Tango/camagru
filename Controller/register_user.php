@@ -27,7 +27,7 @@ try {
 	else
 		display_error("Could not register user");
 }
-$message = 'Welcome to Camagru! To confirm your user, please click <a href="http://localhost:8100/Controller/verify.php?token='.$token.'">here</a>. If this wasn\'t you, ignore this email and no action will be taken';
+$message = 'Welcome to Camagru! To confirm your user, please click <a href="http://'.$_SERVER['HTTP_HOST'].'/Controller/verify.php?token='.$token.'">here</a>. If this wasn\'t you, ignore this email and no action will be taken';
 $message = wordwrap($message, 70, "\n");
 mail($email, "Camagru registration", $message);
 #TODO: fix email

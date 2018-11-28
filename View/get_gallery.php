@@ -15,6 +15,12 @@ function get_gallery(int $start = 0, int $size = 5){
 	<div class="card-header">
 		<img src=<?php echo '"http://loyalkng.com/wp-content/uploads/2010/01/facebook-art-no-photo-image-batman-mickey-mouse-spock-elvis-rick-roll.jpg"'?> height="30" width="30">
 		<?php echo $p['username']?>
+		<?php if ($p['user'] == $_SESSION['user']['uuid']) {?>
+			<a href=
+				<?php echo '"/Controller/delete_image.php?image='.$p['uuid'].'&user='.$_SESSION['user']['uuid'].'"'?>>
+				<img src="https://cdn2.iconfinder.com/data/icons/cleaning-19/30/30x30-10-512.png" style="float: right" width="20" height="20">
+			</a>
+		<?php } ?>
 	</div>
 	<div class="card-body">
 		<img src=<?php echo '"/Image/', $p['uuid'], '.png"'; ?>>
@@ -44,9 +50,9 @@ function get_gallery(int $start = 0, int $size = 5){
 	}
 }
 function count_gallery($size){
-	//TODO: check
+	global $sql_get_gallery_size;
 	$sql_get_gallery_size->execute();
-	$value = $sql_get_gallery_size->fetchAll(PDO::FETCH_ASSOC)[0]['count'];
-	return (intval($count/$size));
+	$count = $sql_get_gallery_size->fetchAll(PDO::FETCH_ASSOC)[0]['count'] - 1;
+	return (intval($count/$size) + 1);
 }
 ?>

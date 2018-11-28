@@ -3,7 +3,7 @@ require_once($_SERVER['DOCUMENT_ROOT'].'/config/database.php');
 
 $sql_get_gallery_page = $db->prepare('
 	SELECT
-		a.`uuid`, a.`like_count`, a.`comment_count`, a.`created`, b.username as username, (SELECT 1 FROM `likes` WHERE `upload` = a.`uuid` AND `user` = :user) as is_liked
+		a.`uuid`, a.`like_count`, a.`comment_count`, a.`created`, b.username as username, (SELECT 1 FROM `likes` WHERE `upload` = a.`uuid` AND `user` = :user) as is_liked, a.`user`
 	FROM
 		`uploads` as a
 	JOIN
@@ -16,11 +16,11 @@ $sql_get_gallery_size = $db->prepare('
 	SELECT
 		COUNT(*) as count
 	FROM
-		`uplaods`
+		`uploads`
 ');
 $sql_get_image = $db->prepare('
 	SELECT
-		a.`uuid`, a.`like_count`, a.`comment_count`, a.`created`, b.username as username, (SELECT 1 FROM `likes` WHERE `upload` = a.`uuid` AND `user` = :user) as is_liked
+		a.`uuid`, a.`like_count`, a.`comment_count`, a.`created`, b.username as username, (SELECT 1 FROM `likes` WHERE `upload` = a.`uuid` AND `user` = :user) as is_liked, `user`
 	FROM
 		`uploads` as a
 	JOIN
@@ -66,6 +66,14 @@ $sql_get_last_upload = $db->prepare('
 		`user` = :user
 	ORDER BY `created` DESC
 	LIMIT 1;
+');
+$sql_get_email = $db->prepare('
+	SELECT
+		`email`
+	FROM
+		`users`
+	WHERE
+		`uuid` = :user AND `email_on_comment` = 1
 ');
 $sql_post_user = $db->prepare('
 	INSERT INTO `users`
@@ -126,7 +134,7 @@ $sql_delete_user = $db->prepare('
 ');
 $sql_delete_upload = $db->prepare('
 	DELETE FROM `uploads`
-	WHERE `uuid` = :upload
+	WHERE `uuid` = :upload AND `user` = :user
 ');
 $sql_delete_like = $db->prepare('
 	DELETE FROM `likes`
