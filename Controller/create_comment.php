@@ -14,14 +14,14 @@ try {
 	display_error("Could not upload comment");
 }
 try {
-	$sql_get_email->execute(Array(":user"=>$_SESSION['user']['uuid']);
+	$sql_get_email->execute(Array(":user"=>$_SESSION['user']['uuid']));
 	$email = $sql_get_email->fetchAll(PDO::FETCH_ASSOC);
 	//Check that email is returned
-	if (rowCount($sql_get_email) != 1)
+	if ($sql_get_email->rowCount() != 1)
 		header('Location: /image.php?image='.$image);
 	$email = $email[0]['email'];
 	if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
-		$message = 'A user commented on your post! To see the comment, click <a href="http://'.$_SERVER['HTTP_HOST'].'/image.php?image='.$image.'">here</a>.'."\nYou can disable these emails in your profile settings.";
+		$message = 'A user commented "'.$comment'"on your post! To see the comment, click <a href="http://'.$_SERVER['HTTP_HOST'].'/image.php?image='.$image.'">here</a>.'."\nYou can disable these emails in your profile settings.";
 		$message = wordwrap($message, 70, "\n");
 		mail($email, "Camagru comment", $message);
 	}

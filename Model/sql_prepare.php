@@ -113,6 +113,19 @@ $sql_update_password = $db->prepare('
 	WHERE
 		`uuid` = :user;
 ');
+$sql_invalidate_user = $db->prepare('
+	UPDATE `users` SET
+		`validation_required` = :token
+	WHERE
+		`email` = :email;
+');
+$sql_reset_password = $db->prepare('
+	UPDATE `users` SET
+		`password`= :newpass,
+		`validation_required` = NULL
+	WHERE
+		`validation_required` = :token;
+');
 $sql_update_comment = $db->prepare('
 	UPDATE `comments` SET
 		`text` = :text

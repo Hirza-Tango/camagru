@@ -1,8 +1,8 @@
 <?php
 require_once($_SERVER['DOCUMENT_ROOT'].'/init.php');
+$user = !empty($_SESSION['user']) ? $_SESSION['user']['uuid'] : NULL;
 function get_gallery(int $start = 0, int $size = 5){
-	global $sql_get_gallery_page;
-	$user = isset($_SESSION['user']) ? $_SESSION['user']['uuid'] : NULL;
+	global $sql_get_gallery_page, $user;
 	try {
 		$sql_get_gallery_page->execute(Array(":start"=>$start, ":page_size"=>$size, ":user"=>$user));
 		$page = $sql_get_gallery_page->fetchAll(PDO::FETCH_ASSOC);
@@ -15,9 +15,9 @@ function get_gallery(int $start = 0, int $size = 5){
 	<div class="card-header">
 		<img src=<?php echo '"http://loyalkng.com/wp-content/uploads/2010/01/facebook-art-no-photo-image-batman-mickey-mouse-spock-elvis-rick-roll.jpg"'?> height="30" width="30">
 		<?php echo $p['username']?>
-		<?php if ($p['user'] == $_SESSION['user']['uuid']) {?>
+		<?php global $user; if ($p['user'] == $user) {?>
 			<a href=
-				<?php echo '"/Controller/delete_image.php?image='.$p['uuid'].'&user='.$_SESSION['user']['uuid'].'"'?>>
+				<?php echo '"/Controller/delete_image.php?image='.$p['uuid'].'&user='.$user.'"'?>>
 				<img src="https://cdn2.iconfinder.com/data/icons/cleaning-19/30/30x30-10-512.png" style="float: right" width="20" height="20">
 			</a>
 		<?php } ?>

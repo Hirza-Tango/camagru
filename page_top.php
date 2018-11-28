@@ -26,8 +26,7 @@ require_once($_SERVER['DOCUMENT_ROOT'].'/init.php');
 					</div>
 					<div class="col-auto">
 						<input type="password" class="form-control" placeholder="Password" name="password" required pattern=".{8,}" title="Password must be at least 8 characters long and have at least 1 digit">
-						<a href="#">Forgotten password?</a>
-						<!-- TODO: forgot password -->
+						<a href="/forgot_password.php">Forgotten password?</a>
 					</div>
 					<div class="col-auto">
 						<button class="btn btn-primary" type="submit" name="login">Login</button>
