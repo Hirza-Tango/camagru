@@ -69,11 +69,15 @@ $sql_get_last_upload = $db->prepare('
 ');
 $sql_get_email = $db->prepare('
 	SELECT
-		`email`
+		b.`email`
 	FROM
-		`users`
+		`uploads` as a
+	JOIN
+		`users` as b
+	ON
+		a.`user` = b.`uuid`
 	WHERE
-		`uuid` = :user AND `email_on_comment` = 1
+		a.`uuid` = :upload AND `email_on_comment` = 1
 ');
 $sql_post_user = $db->prepare('
 	INSERT INTO `users`

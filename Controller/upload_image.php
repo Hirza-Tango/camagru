@@ -8,7 +8,6 @@ $base = imagecreatefromstring($base);
 if ($base === false)
 	display_error("Could not load image");
 $overlays = explode(',', $_POST['overlays']);
-error_log(var_export($overlays) . PHP_EOL, 3, $_SERVER['DOCUMENT_ROOT']."/log.log");
 foreach ($overlays as $value) {
 	$new = imagecreatefromstring(file_get_contents($value));
 	if ($new === false)
