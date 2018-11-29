@@ -58,10 +58,8 @@ try {
 	imagedestroy($base);
 	display_error("Could not upload image. Please retry");
 }
-error_log("Filename is: ".$filename, 3, $_SERVER['DOCUMENT_ROOT']."/log.log");
 if (!imagepng($base, $_SERVER['DOCUMENT_ROOT'].'//Image//'.$filename)) {
-	//$db->rollback();
-	$db->commit();
+	$db->rollback();
 	imagedestroy($base);
 	display_error("Could not save image. Please retry");
 }
