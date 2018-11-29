@@ -24,8 +24,6 @@ if ($file = file_get_contents(dirname(__FILE__)."/setup.sql"))
 }
 else
 	exit(print "Could not find database init script\n");
-#TODO: initial users/pictures
 array_map('unlink', glob(__DIR__."/../Image/*"));
 @mkdir(__DIR__."/../Image");
-#TODO: delete old pictures
 ?>
