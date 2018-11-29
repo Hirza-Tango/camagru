@@ -23,10 +23,8 @@ try {
 	if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
 		$message = 'A user commented "'.$comment.'"on your post! To see the comment, click <a href="http://'.$_SERVER['HTTP_HOST'].'/image.php?image='.$image.'">here</a>.'."\nYou can disable these emails in your profile settings.";
 		$message = wordwrap($message, 70, "\n");
-		!mail($email, "Camagru comment", $message);
+		mail($email, "Camagru comment", $message);
 	}
-} catch (PDOException $e){
-	display_error("DEBUG: ".$e->getMessage());
-}
+} catch (PDOException $e){}
 header('Location: /image.php?image='.$image);
 ?>

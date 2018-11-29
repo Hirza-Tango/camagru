@@ -146,6 +146,7 @@ function upload_overlay(){
 		hiddenCanvas.width = context.width = cam.videoWidth;
 		hiddenCanvas.height = context.height = cam.videoHeight;
 		context.drawImage(cam, 0, 0);
+		//TODO: freeze stream
 	}
 	let params = {
 		image: hiddenCanvas.toDataURL(),

@@ -56,12 +56,14 @@ try {
 } catch (PDOException $e) {
 	$db->rollback();
 	imagedestroy($base);
-	display_error("Could not upload. Please retry");
+	display_error("Could not upload image. Please retry");
 }
+error_log("Filename is: ".$filename, 3, $_SERVER['DOCUMENT_ROOT']."/log.log");
 if (!imagepng($base, $_SERVER['DOCUMENT_ROOT'].'//Image//'.$filename)) {
-	$db->rollback();
+	//$db->rollback();
+	$db->commit();
 	imagedestroy($base);
-	display_error("Could not upload. Please retry");
+	display_error("Could not save image. Please retry");
 }
 $db->commit();
 imagedestroy($base);

@@ -12,7 +12,6 @@ require_once($_SERVER['DOCUMENT_ROOT'].'/init.php');
 	<title>Camagru</title>
 </head>
 <body>
-	<?php echo "DEBUG:", var_dump($_SESSION);?>
 	<nav class="navbar navbar-dark bg-dark sticky-top">
 		<a class="navbar-brand" href="/">
 			<img src="https://vectr.com/hirza_tango/o1dtN6CW2P.svg" width="40" height="40" alt="">
