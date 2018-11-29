@@ -1,4 +1,8 @@
+DROP TABLE IF EXISTS `comments`;
+DROP TABLE IF EXISTS `likes`;
+DROP TABLE IF EXISTS `uploads`;
 DROP TABLE IF EXISTS `users`;
+
 CREATE TABLE `users` (
 	`uuid` CHAR(36) PRIMARY KEY,
 	`email` VARCHAR(191) UNIQUE NOT NULL,
@@ -8,7 +12,6 @@ CREATE TABLE `users` (
 	`validation_required` CHAR(10) NULL
 );
 
-DROP TABLE IF EXISTS `uploads`;
 CREATE TABLE `uploads` (
 	`uuid` CHAR(36) PRIMARY KEY,
 	`user` CHAR(36) NOT NULL,
@@ -18,7 +21,6 @@ CREATE TABLE `uploads` (
 	FOREIGN KEY (`user`) REFERENCES `users`(`uuid`) ON DELETE CASCADE
 );
 
-DROP TABLE IF EXISTS `comments`;
 CREATE TABLE `comments` (
 	`upload` CHAR(36) NOT NULL,
 	`user` CHAR(36) NOT NULL,
@@ -29,7 +31,6 @@ CREATE TABLE `comments` (
 	FOREIGN KEY (`upload`) REFERENCES `uploads`(`uuid`) ON DELETE CASCADE
 );
 
-DROP TABLE IF EXISTS `likes`;
 CREATE TABLE IF NOT EXISTS `likes` (
 	`upload` CHAR(36) NOT NULL,
 	`user` CHAR(36) NOT NULL,
