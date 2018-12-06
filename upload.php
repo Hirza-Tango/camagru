@@ -1,43 +1,5 @@
 <?php include($_SERVER['DOCUMENT_ROOT']."/page_top.php");?>
 <?php if (!isset($_SESSION['user'])) { display_error("Users cannot upload without logging in!");}?>
-<div class="container">
-	<div class="row">
-		<div class="col-10 bg-light">
-			<div class="mx-auto text-center"  style="max-height: 80vh">
-				<div id="display" style="position: relative;">
-					<video autoplay="true" id="webcam" style="object-fit: contain; width:100%; display: none;"></video>
-					<img id="select" style="object-fit: contain; width:100%; display: none;">
-				</div>
-				<br>
-				<button id="button-webcam" class="btn btn-primary" onclick="open_webcam()">Use Webcam</button>
-				<span id="or" style="margin:0;">OR</span>
-				<input type="file" accept="image/*" name="image" id="file" onchange="open_image(event)" style="display: none;">
-				<button id="button-select" class="btn btn-secondary">
-					<label for="file" style="cursor: pointer;margin:0">Select Image</label>
-				</button>
-				<br>
-				<br>
-				<button id="button-confirm" class="btn btn-success" disabled style="display: none" onclick="upload_overlay()">Upload</button>
-				<br>
-				<br>
-			</div>
-		</div>
-		<div class="col-2 bg-secondary" style="overflow-y: scroll; height:90vh">
-			<img src="http://www.pngmart.com/files/5/Aqua-Border-Frame-PNG-Transparent.png" style="object-fit: contain; width:100%;" id="sticker-1" onclick="layer(this)">
-			<img src="http://www.pngmart.com/files/5/Aqua-Border-Frame-Transparent-Background.png" style="object-fit: contain; width:100%;" id="sticker-2" onclick="layer(this)">
-			<img src="https://techflourish.com/images/fancy-crown-border-clipart-5.png" style="object-fit: contain; width:100%;" id="sticker-3" onclick="layer(this)">
-			<img src="https://i.imgur.com/LZ69tPO.png" style="object-fit: contain; width:100%;" id="sticker-4" onclick="layer(this)">
-			<img src="https://i.imgur.com/QqOSYyw.png" style="object-fit: contain; width:100%;" id="sticker-5" onclick="layer(this)">
-			<img src="https://i.imgur.com/S2dRq30.png" style="object-fit: contain; width:100%;" id="sticker-6" onclick="layer(this)">
-			<img src="https://i.imgur.com/oNWfkgF.png" style="object-fit: contain; width:100%;" id="sticker-7" onclick="layer(this)">
-			<img src="https://i.imgur.com/4W0FCVB.png" style="object-fit: contain; width:100%;" id="sticker-8" onclick="layer(this)">
-			<img src="https://i.imgur.com/Q9XeYpc.png" style="object-fit: contain; width:100%;" id="sticker-9" onclick="layer(this)">
-			<img src="https://i.imgur.com/aXW4czG.png" style="object-fit: contain; width:100%;" id="sticker-10" onclick="layer(this)">
-			<img src="https://i.imgur.com/5ehSLRe.png" style="object-fit: contain; width:100%;" id="sticker-11" onclick="layer(this)">
-			<img src="https://i.imgur.com/frxyGsG.png" style="object-fit: contain; width:100%;" id="sticker-12" onclick="layer(this)">
-		</div>
-	</div>
-</div>
 <script>
 
 function open_webcam() {
@@ -59,7 +21,7 @@ function open_webcam() {
 	document.getElementById("file").value = "";
 	//enable camera
 	cam.style.display="block";
-	if (navigator.mediaDevices.getUserMedia) {      
+	if (navigator.mediaDevices.getUserMedia) {
 		navigator.mediaDevices.getUserMedia({audio: false, video: true})
 		.then(function(stream) {
 			cam.srcObject = stream;
@@ -83,7 +45,7 @@ function open_image(event) {
 	document.getElementById("button-confirm").style.display="inline-block";
 
 	//Turn off camera
-	if (navigator.mediaDevices.getUserMedia) {      
+	if (navigator.mediaDevices.getUserMedia) {
 		navigator.mediaDevices.getUserMedia({audio: false, video: true})
 		.then(function(stream) {
 			stream.getTracks().forEach(element => {
@@ -122,7 +84,7 @@ function layer(element) {
 		dup.style.maxHeight = "100%";
 		dup.setAttribute("class", "overlay");
 		document.getElementById('display').appendChild(dup);
-		
+
 		//ungrey button
 		document.getElementById("button-confirm").removeAttribute("disabled");
 	}
@@ -137,7 +99,7 @@ function upload_overlay(){
 	let context = hiddenCanvas.getContext("2d");
 
 	if (image.style.display == "block")
-	{	
+	{
 		hiddenCanvas.height = context.height = image.naturalHeight;
 		hiddenCanvas.width = context.width = image.naturalWidth;
 		context.drawImage(image, 0, 0);
@@ -170,4 +132,42 @@ function upload_overlay(){
     form.submit();
 }
 </script>
+<div class="container">
+	<div class="row">
+		<div class="col-10 bg-light">
+			<div class="mx-auto text-center"  style="max-height: 80vh">
+				<div id="display" style="position: relative;">
+					<video autoplay="true" id="webcam" style="object-fit: contain; width:100%; display: none;"></video>
+					<img id="select" style="object-fit: contain; width:100%; display: none;">
+				</div>
+				<br>
+				<button id="button-webcam" class="btn btn-primary" onclick="open_webcam()">Use Webcam</button>
+				<span id="or" style="margin:0;">OR</span>
+				<input type="file" accept="image/*" name="image" id="file" onchange="open_image(event)" style="display: none;">
+				<button id="button-select" class="btn btn-secondary">
+					<label for="file" style="cursor: pointer;margin:0">Select Image</label>
+				</button>
+				<br>
+				<br>
+				<button id="button-confirm" class="btn btn-success" disabled style="display: none" onclick="upload_overlay()">Upload</button>
+				<br>
+				<br>
+			</div>
+		</div>
+		<div class="col-2 bg-secondary" style="overflow-y: scroll; height:90vh">
+			<img src="http://www.pngmart.com/files/5/Aqua-Border-Frame-PNG-Transparent.png" style="object-fit: contain; width:100%;" id="sticker-1" onclick="layer(this)">
+			<img src="http://www.pngmart.com/files/5/Aqua-Border-Frame-Transparent-Background.png" style="object-fit: contain; width:100%;" id="sticker-2" onclick="layer(this)">
+			<img src="https://techflourish.com/images/fancy-crown-border-clipart-5.png" style="object-fit: contain; width:100%;" id="sticker-3" onclick="layer(this)">
+			<img src="https://i.imgur.com/LZ69tPO.png" style="object-fit: contain; width:100%;" id="sticker-4" onclick="layer(this)">
+			<img src="https://i.imgur.com/QqOSYyw.png" style="object-fit: contain; width:100%;" id="sticker-5" onclick="layer(this)">
+			<img src="https://i.imgur.com/S2dRq30.png" style="object-fit: contain; width:100%;" id="sticker-6" onclick="layer(this)">
+			<img src="https://i.imgur.com/oNWfkgF.png" style="object-fit: contain; width:100%;" id="sticker-7" onclick="layer(this)">
+			<img src="https://i.imgur.com/4W0FCVB.png" style="object-fit: contain; width:100%;" id="sticker-8" onclick="layer(this)">
+			<img src="https://i.imgur.com/Q9XeYpc.png" style="object-fit: contain; width:100%;" id="sticker-9" onclick="layer(this)">
+			<img src="https://i.imgur.com/aXW4czG.png" style="object-fit: contain; width:100%;" id="sticker-10" onclick="layer(this)">
+			<img src="https://i.imgur.com/5ehSLRe.png" style="object-fit: contain; width:100%;" id="sticker-11" onclick="layer(this)">
+			<img src="https://i.imgur.com/frxyGsG.png" style="object-fit: contain; width:100%;" id="sticker-12" onclick="layer(this)">
+		</div>
+	</div>
+</div>
 <?php include($_SERVER['DOCUMENT_ROOT']."/page_bottom.php");?>
