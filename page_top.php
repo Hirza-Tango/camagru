@@ -54,11 +54,11 @@ require_once($_SERVER['DOCUMENT_ROOT'].'/init.php');
 		<?php } ?>
 	</nav>
 	<?php if (isset($_SESSION['last_error'])) { ?>
-		<div class="alert alert-danger">
+		<div class="alert alert-danger" onclick="this.style.display='none'">
 			<?php echo $_SESSION['last_error']; ?>
 		</div>
 	<?php unset($_SESSION['last_error'], $_SESSION['last_status']);} else if (isset($_SESSION['last_status'])) { ?>
-		<div class="alert alert-success">
+		<div class="alert alert-success" onclick="this.style.display='none'">
 			<?php echo $_SESSION['last_status']; ?>
 		</div>
 	<?php unset($_SESSION['last_status']); } ?>
@@ -108,4 +108,3 @@ require_once($_SERVER['DOCUMENT_ROOT'].'/init.php');
 	}
 	</script>
 	<?php } ?>
-		
