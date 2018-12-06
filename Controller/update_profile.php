@@ -2,6 +2,7 @@
 require_once($_SERVER['DOCUMENT_ROOT'].'/init.php');
 $username = input_clean($_POST['username']);
 $email = input_clean($_POST['email']);
+$old_email = input_clean($_POST['old_email']);
 $email_on_comment = intval(isset($_POST['email_on_comment']));
 if (!(isset($username, $email)))
 	display_error("Missing field");

@@ -30,6 +30,6 @@ try {
 $message = 'Welcome to Camagru! To confirm your user, please click <a href="http://'.$_SERVER['HTTP_HOST'].'/Controller/verify.php?token='.$token.'">here</a>. If this wasn\'t you, ignore this email and no action will be taken';
 $message = wordwrap($message, 70, "\n");
 mail($email, "Camagru registration", $message);
-display_status("Registered successfully. Please verify your email");
+display_status("Registered successfully. Please verify your email", "Content-Type: text/html; charset=UTF-8");
 header("Location: /");
 ?>

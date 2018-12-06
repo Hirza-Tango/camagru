@@ -13,9 +13,11 @@ if (isset($_POST['reset'])) {
 	} catch (PDOException $e) {
 		display_error("Could not reset password");
 	}
+	if ($sql_invalidate_user->rowCount() < 1)
+		display_error("Email not registered. Please register.");
 	$message = 'This email is to reset your password. Please click <a href="http://'.$_SERVER['HTTP_HOST'].'/Controller/reset_password.php?token='.$token.'">here</a>';
 	$message = wordwrap($message, 70, "\n");
-	mail($email, "Camagru password reset", $message);
+	mail($email, "Camagru password reset", $message, "Content-Type: text/html; charset=UTF-8");
 	display_status("Reset email sent. Please check your inbox");
 	header("Location: /");
 }
